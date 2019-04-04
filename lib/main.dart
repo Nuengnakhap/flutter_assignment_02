@@ -43,7 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
               _index == 0
                   ? Navigator.push(context,
                       MaterialPageRoute(builder: (context) => NewSubject()))
-                  : await DBProvider.db.deleteDone();
+                  : await TodoProvider.db.deleteDone();
               setState(() {});
             },
           ),
@@ -51,8 +51,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: FutureBuilder<List<Subject>>(
         future: _index == 0
-            ? DBProvider.db.getnotdoneSubjects()
-            : DBProvider.db.getdoneSubjects(),
+            ? TodoProvider.db.getnotdoneSubjects()
+            : TodoProvider.db.getdoneSubjects(),
         builder: (BuildContext context, AsyncSnapshot<List<Subject>> snapshot) {
           if (snapshot.hasData && snapshot.data.length > 0) {
             return ListView.builder(
@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     title: Text(item.title),
                     trailing: Checkbox(
                       onChanged: (bool value) {
-                        DBProvider.db.blockOrUnblock(item);
+                        TodoProvider.db.doneOrUndone(item);
                         setState(() {});
                       },
                       value: item.done,

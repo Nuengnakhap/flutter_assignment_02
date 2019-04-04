@@ -34,7 +34,7 @@ class _NewSubjectState extends State<NewSubject> {
                       child: Text("Save"),
                       onPressed: () async {
                         if (_key.currentState.validate()) {
-                          await DBProvider.db.newSubject(
+                          await TodoProvider.db.newSubject(
                             Subject(title: title.text, done: false),
                           );
                           Navigator.pop(context);

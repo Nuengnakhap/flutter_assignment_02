@@ -33,10 +33,10 @@ class Subject {
       };
 }
 
-class DBProvider {
-  DBProvider._();
+class TodoProvider {
+  TodoProvider._();
 
-  static final DBProvider db = DBProvider._();
+  static final TodoProvider db = TodoProvider._();
 
   Database _database;
 
@@ -73,7 +73,7 @@ class DBProvider {
     return newSubject;
   }
 
-  blockOrUnblock(Subject subject) async {
+  doneOrUndone(Subject subject) async {
     final db = await database;
     Subject done =
         Subject(id: subject.id, title: subject.title, done: !subject.done);
