@@ -8,20 +8,20 @@ import 'package:sqflite/sqflite.dart';
 final String columnId = "id";
 final String columnTitle = "title";
 final String columnDone = "done";
-final String tableName = 'subject';
+final String tableName = 'todo';
 
-class Subject {
+class Todo {
   int id;
   String title;
   bool done;
 
-  Subject({
+  Todo({
     this.id,
     this.title,
     this.done,
   });
 
-  factory Subject.fromMap(Map<String, dynamic> json) => new Subject(
+  factory Todo.fromMap(Map<String, dynamic> json) => new Todo(
         id: json[columnId],
         title: json[columnTitle],
         done: json[columnDone] == 1,
@@ -48,7 +48,7 @@ class TodoProvider {
 
   initDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "Test2DB.db");
+    String path = join(documentsDirectory.path, "todo.db");
     return await openDatabase(path, version: 1,
         onCreate: (Database db, int version) async {
       await db.execute("CREATE TABLE $tableName ("
@@ -59,7 +59,7 @@ class TodoProvider {
     });
   }
 
-  newSubject(Subject newSubject) async {
+  insertTodo(Todo todo) async {
     final db = await database;
     // var table =
     //     await db.rawQuery("SELECT MAX($columnId)+1 as $columnId FROM Subject");
@@ -69,38 +69,38 @@ class TodoProvider {
     //     " VALUES (?,?,?)",
     //     [id, newSubject.title, newSubject.done]);
     // return raw;
-    newSubject.id = await db.insert(tableName, newSubject.toMap());
-    return newSubject;
+    todo.id = await db.insert(tableName, todo.toMap());
+    return todo;
   }
 
-  doneOrUndone(Subject subject) async {
+  doneOrUndone(Todo todo) async {
     final db = await database;
-    Subject done =
-        Subject(id: subject.id, title: subject.title, done: !subject.done);
+    Todo done =
+        Todo(id: todo.id, title: todo.title, done: !todo.done);
     var res = await db.update(tableName, done.toMap(),
-        where: "$columnId = ?", whereArgs: [subject.id]);
+        where: "$columnId = ?", whereArgs: [todo.id]);
     return res;
   }
 
-  Future<List<Subject>> getdoneSubjects() async {
+  Future<List<Todo>> getDoneTodo() async {
     final db = await database;
 
     // var res = await db.rawQuery("SELECT * FROM Subject WHERE done=1");
     var res = await db.query(tableName, where: "done = ? ", whereArgs: [1]);
 
-    List<Subject> list =
-        res.isNotEmpty ? res.map((c) => Subject.fromMap(c)).toList() : [];
+    List<Todo> list =
+        res.isNotEmpty ? res.map((c) => Todo.fromMap(c)).toList() : [];
     return list;
   }
 
-  Future<List<Subject>> getnotdoneSubjects() async {
+  Future<List<Todo>> getUnDoneTodo() async {
     final db = await database;
 
     // var res = await db.rawQuery("SELECT * FROM Subject WHERE done=1");
     var res = await db.query(tableName, where: "done = ? ", whereArgs: [0]);
 
-    List<Subject> list =
-        res.isNotEmpty ? res.map((c) => Subject.fromMap(c)).toList() : [];
+    List<Todo> list =
+        res.isNotEmpty ? res.map((c) => Todo.fromMap(c)).toList() : [];
     return list;
   }
 

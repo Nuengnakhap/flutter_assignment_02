@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_assignment_02/method.dart';
-import 'new_subject.dart';
+import 'new_todo.dart';
 
 void main() => runApp(MyApp());
 
@@ -42,23 +42,23 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () async {
               _index == 0
                   ? Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => NewSubject()))
+                      MaterialPageRoute(builder: (context) => NewTodo()))
                   : await TodoProvider.db.deleteDone();
               setState(() {});
             },
           ),
         ],
       ),
-      body: FutureBuilder<List<Subject>>(
+      body: FutureBuilder<List<Todo>>(
         future: _index == 0
-            ? TodoProvider.db.getnotdoneSubjects()
-            : TodoProvider.db.getdoneSubjects(),
-        builder: (BuildContext context, AsyncSnapshot<List<Subject>> snapshot) {
+            ? TodoProvider.db.getUnDoneTodo()
+            : TodoProvider.db.getDoneTodo(),
+        builder: (BuildContext context, AsyncSnapshot<List<Todo>> snapshot) {
           if (snapshot.hasData && snapshot.data.length > 0) {
             return ListView.builder(
               itemCount: snapshot.data.length,
               itemBuilder: (BuildContext context, int index) {
-                Subject item = snapshot.data[index];
+                Todo item = snapshot.data[index];
                 return Container(
                   transform: Matrix4.translationValues(0, -0.5, 0),
                   decoration: BoxDecoration(

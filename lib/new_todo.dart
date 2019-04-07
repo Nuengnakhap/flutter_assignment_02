@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_assignment_02/method.dart';
 
-class NewSubject extends StatefulWidget {
-  _NewSubjectState createState() => _NewSubjectState();
+class NewTodo extends StatefulWidget {
+  _NewTodoState createState() => _NewTodoState();
 }
 
-class _NewSubjectState extends State<NewSubject> {
+class _NewTodoState extends State<NewTodo> {
   final _key = GlobalKey<FormState>();
   TextEditingController title = TextEditingController();
   @override
@@ -34,8 +34,8 @@ class _NewSubjectState extends State<NewSubject> {
                       child: Text("Save"),
                       onPressed: () async {
                         if (_key.currentState.validate()) {
-                          await TodoProvider.db.newSubject(
-                            Subject(title: title.text, done: false),
+                          await TodoProvider.db.insertTodo(
+                            Todo(title: title.text, done: false),
                           );
                           Navigator.pop(context);
                         }
